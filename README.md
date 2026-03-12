@@ -2,7 +2,7 @@
 
 A web application for managing student grades, built with C# (.NET 7) and a custom HttpListener server.
 
-![screenshot](screenshot.png)
+![screenshot](screenshot.jpg)
 
 ## Features
 
