@@ -24,11 +24,10 @@ namespace StudentGradeManager
         };
         public double GPA => Grade switch
         {
-            >= 97 => 4.0, >= 93 => 4.0, >= 90 => 3.7,
-            >= 87 => 3.3, >= 83 => 3.0, >= 80 => 2.7,
-            >= 77 => 2.3, >= 73 => 2.0, >= 70 => 1.7,
-            >= 67 => 1.3, >= 63 => 1.0, >= 60 => 0.7,
-            _ => 0.0
+            >= 97 => 1.00, >= 94 => 1.25, >= 91 => 1.50,
+            >= 88 => 1.75, >= 85 => 2.00, >= 82 => 2.25,
+            >= 79 => 2.50, >= 76 => 2.75, >= 75 => 3.00,
+            _ => 5.00
         };
     }
 
@@ -108,7 +107,8 @@ namespace StudentGradeManager
         }
 
         public List<Student> SortByGrade() => _students.OrderByDescending(s => s.Grade).ToList();
-        public List<Student> SortByName() => _students.OrderBy(s => s.Name).ToList();
+        public List<Student> SortByName()  => _students.OrderBy(s => s.Name).ToList();
+        public List<Student> SortByGPA()   => _students.OrderBy(s => s.GPA).ToList();
 
         private void SaveToFile()
         {
@@ -178,7 +178,9 @@ namespace StudentGradeManager
                 else if (path == "/api/students" && req.HttpMethod == "GET")
                 {
                     string sort = req.QueryString["sort"] ?? "name";
-                    var students = sort == "grade" ? manager.SortByGrade() : manager.SortByName();
+                    var students = sort == "grade" ? manager.SortByGrade()
+                                 : sort == "gpa"   ? manager.SortByGPA()
+                                 : manager.SortByName();
                     await WriteJson(res, students);
                 }
                 else if (path == "/api/students" && req.HttpMethod == "POST")

@@ -323,6 +323,7 @@ input[readonly]    { opacity: 0.55; cursor: not-allowed; }
 
 .item-actions { display: flex; gap: 5px; flex-shrink: 0; }
 
+/* Hide letter badge on very small screens */
 .badge-letter { display: none; }
 
 .empty-state { text-align: center; padding: 2.5rem 1rem; color: var(--text-3); }
@@ -417,6 +418,67 @@ input[readonly]    { opacity: 0.55; cursor: not-allowed; }
 ───────────────────────────── */
 hr.divider { border: none; border-top: 1px solid var(--border); margin: 0.9rem 0; }
 
+/* ─── PANEL TOOLBAR (tabs + export row) ─── */
+.panel-toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  gap: 8px;
+}
+.panel-toolbar .tabs {
+  border-bottom: none;
+  flex: 1;
+  padding-bottom: 0;
+}
+
+.export-actions {
+  display: flex;
+  gap: 6px;
+  padding: 0 1rem 0.65rem;
+  flex-shrink: 0;
+}
+
+.btn-export {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 10px; border-radius: 7px;
+  font-size: 0.7rem; font-weight: 600;
+  border: 1px solid var(--border2);
+  cursor: pointer; transition: all 0.18s;
+  font-family: 'Inter', sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+.btn-excel {
+  background: rgba(16,185,129,0.1);
+  color: #059669;
+  border-color: rgba(16,185,129,0.3);
+}
+.btn-excel:hover  { background: rgba(16,185,129,0.18); }
+.btn-excel:active { transform: scale(0.97); }
+
+.btn-word {
+  background: rgba(59,130,246,0.1);
+  color: var(--accent);
+  border-color: rgba(59,130,246,0.3);
+}
+.btn-word:hover  { background: rgba(59,130,246,0.18); }
+.btn-word:active { transform: scale(0.97); }
+
+.btn-export:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.export-label { display: none; }
+
+/* ─── GPA BADGE ─── */
+.badge-gpa { display: none; }
+.gpa-neutral {
+  color: var(--text-2);
+  border-color: var(--border2);
+  background: var(--surface3);
+  font-size: 0.72rem;
+}
+
+/* ─── SORT GRID ─── */
 .sort-grid {
   display: grid; grid-template-columns: 1fr; gap: 1.25rem;
 }
@@ -531,6 +593,10 @@ hr.divider { border: none; border-top: 1px solid var(--border); margin: 0.9rem 0
   .student-item { gap: 10px; }
   .student-name { font-size: 0.88rem; }
 
+  .badge-gpa { display: inline; }
+
+  .export-label { display: inline; }
+
   #toast {
     left: auto; right: 1.25rem;
     transform: translateY(80px);
@@ -567,6 +633,9 @@ hr.divider { border: none; border-top: 1px solid var(--border); margin: 0.9rem 0
     gap: 1.25rem;
     align-items: start;
   }
+
+  /* Three columns in Sort & Filter on desktop */
+  .sort-grid { grid-template-columns: 1fr 1fr 1fr; }
 
   .card + .card { margin-top: 1.25rem; }
 

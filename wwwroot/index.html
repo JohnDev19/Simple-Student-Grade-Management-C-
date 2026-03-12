@@ -84,9 +84,21 @@
 
     <!-- RIGHT PANEL -->
     <div class="card">
-      <div class="tabs">
-        <button class="tab active" onclick="switchTab('all', this)">All Students</button>
-        <button class="tab" onclick="switchTab('sort', this)">Sort &amp; Filter</button>
+      <div class="panel-toolbar">
+        <div class="tabs">
+          <button class="tab active" onclick="switchTab('all', this)">All Students</button>
+          <button class="tab" onclick="switchTab('sort', this)">Sort &amp; Filter</button>
+        </div>
+        <div class="export-actions">
+          <button class="btn btn-export btn-excel" onclick="exportExcel()" title="Export to Excel">
+            <i class="fa-solid fa-file-excel"></i>
+            <span class="export-label">Excel</span>
+          </button>
+          <button class="btn btn-export btn-word" onclick="exportDocx()" title="Export to Word">
+            <i class="fa-solid fa-file-word"></i>
+            <span class="export-label">Word</span>
+          </button>
+        </div>
       </div>
 
       <!-- ALL STUDENTS -->
@@ -97,6 +109,9 @@
           </button>
           <button class="sort-btn" id="sortGradeBtn" onclick="setSortStudents('grade')">
             <i class="fa-solid fa-arrow-down-9-1"></i> Grade
+          </button>
+          <button class="sort-btn" id="sortGpaBtn" onclick="setSortStudents('gpa')">
+            <i class="fa-solid fa-star-half-stroke"></i> GPA
           </button>
           <span class="count-pill" id="listCount">0</span>
         </div>
@@ -122,6 +137,12 @@
               <i class="fa-solid fa-arrow-down-a-z"></i> Alphabetical
             </div>
             <div class="student-list" id="sortedByName"></div>
+          </div>
+          <div>
+            <div class="sort-col-title">
+              <i class="fa-solid fa-star-half-stroke"></i> By GPA (PH Scale)
+            </div>
+            <div class="student-list" id="sortedByGpa"></div>
           </div>
         </div>
       </div>
