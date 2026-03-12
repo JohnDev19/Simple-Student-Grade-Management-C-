@@ -136,12 +136,12 @@ namespace StudentGradeManager
         static async Task Main()
         {
             var listener = new HttpListener();
-            listener.Prefixes.Add("http://localhost:5050/");
+            listener.Prefixes.Add("http://*:5000/");
             listener.Start();
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("╔══════════════════════════════════════╗");
             Console.WriteLine("║    Student Grade Manager - Running   ║");
-            Console.WriteLine("║    http://localhost:5050             ║");
+            Console.WriteLine("║    http://0.0.0.0:5000              ║");
             Console.WriteLine("║    Press Ctrl+C to stop              ║");
             Console.WriteLine("╚══════════════════════════════════════╝");
             Console.ResetColor();
@@ -170,6 +170,10 @@ namespace StudentGradeManager
                 if (path == "/" || path == "/index.html")
                 {
                     await ServeHtml(res);
+                }
+                else if (path.StartsWith("/css/") || path.StartsWith("/js/"))
+                {
+                    await ServeStatic(res, path);
                 }
                 else if (path == "/api/students" && req.HttpMethod == "GET")
                 {
@@ -240,13 +244,35 @@ namespace StudentGradeManager
             return await reader.ReadToEndAsync();
         }
 
+        static string GetWwwRoot()
+        {
+            string a = Path.Combine(AppContext.BaseDirectory, "wwwroot");
+            if (Directory.Exists(a)) return a;
+            return Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+        }
+
         static async Task ServeHtml(HttpListenerResponse res)
         {
             res.ContentType = "text/html; charset=utf-8";
-            string htmlFile = Path.Combine(AppContext.BaseDirectory, "wwwroot", "index.html");
-            if (!File.Exists(htmlFile))
-                htmlFile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index.html");
+            string htmlFile = Path.Combine(GetWwwRoot(), "index.html");
             var bytes = await File.ReadAllBytesAsync(htmlFile);
+            await res.OutputStream.WriteAsync(bytes);
+            res.Close();
+        }
+
+        static async Task ServeStatic(HttpListenerResponse res, string urlPath)
+        {
+            string filePath = Path.Combine(GetWwwRoot(), urlPath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+            if (!File.Exists(filePath)) { res.StatusCode = 404; res.Close(); return; }
+
+            string ext = Path.GetExtension(filePath).ToLower();
+            res.ContentType = ext switch
+            {
+                ".css" => "text/css; charset=utf-8",
+                ".js"  => "application/javascript; charset=utf-8",
+                _      => "application/octet-stream"
+            };
+            var bytes = await File.ReadAllBytesAsync(filePath);
             await res.OutputStream.WriteAsync(bytes);
             res.Close();
         }

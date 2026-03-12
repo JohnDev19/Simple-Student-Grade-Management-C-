@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Grade Manager</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+    <div>
+      <div class="logo-text">Grade Manager</div>
+      <div class="logo-sub">Student Academic Tracker</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="header-badge" id="studentCount">0 students</div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="grid">
+
+    <!-- LEFT PANEL -->
+    <div>
+
+      <!-- ADD STUDENT -->
+      <div class="card">
+        <div class="card-header">
+          <i class="fa-solid fa-user-plus"></i>
+          <h2>Add Student</h2>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label>Student Name</label>
+            <input type="text" id="addName" placeholder="e.g. Juan dela Cruz"/>
+          </div>
+          <div class="form-group">
+            <label>Grade (0 &ndash; 100)</label>
+            <input type="number" id="addGrade" placeholder="e.g. 87" min="0" max="100" step="0.01"/>
+          </div>
+          <button class="btn btn-primary" onclick="addStudent()">
+            <i class="fa-solid fa-plus"></i> Add Student
+          </button>
+        </div>
+      </div>
+
+      <!-- SEARCH -->
+      <div class="card">
+        <div class="card-header">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <h2>Search Student</h2>
+        </div>
+        <div class="card-body">
+          <div class="search-row">
+            <input type="text" id="searchInput" placeholder="Enter student name..."/>
+            <button class="btn btn-search btn-sm" onclick="searchStudent()">
+              <i class="fa-solid fa-search"></i> Search
+            </button>
+          </div>
+          <div class="search-result" id="searchResult"></div>
+        </div>
+      </div>
+
+      <!-- STATISTICS -->
+      <div class="card">
+        <div class="card-header">
+          <i class="fa-solid fa-chart-bar"></i>
+          <h2>Statistics</h2>
+        </div>
+        <div class="card-body" id="statsBody">
+          <div class="empty-state">
+            <i class="fa-solid fa-chart-line"></i>
+            <p>Add students to see statistics.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="card">
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('all', this)">All Students</button>
+        <button class="tab" onclick="switchTab('sort', this)">Sort &amp; Filter</button>
+      </div>
+
+      <!-- ALL STUDENTS -->
+      <div class="tab-content active" id="tab-all">
+        <div class="sort-bar">
+          <button class="sort-btn active" id="sortNameBtn" onclick="setSortStudents('name')">
+            <i class="fa-solid fa-arrow-down-a-z"></i> Name
+          </button>
+          <button class="sort-btn" id="sortGradeBtn" onclick="setSortStudents('grade')">
+            <i class="fa-solid fa-arrow-down-9-1"></i> Grade
+          </button>
+          <span class="count-pill" id="listCount">0</span>
+        </div>
+        <div class="student-list" id="studentList">
+          <div class="empty-state">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <p>No students yet. Add your first student.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SORT TAB -->
+      <div class="tab-content" id="tab-sort">
+        <div class="sort-grid">
+          <div>
+            <div class="sort-col-title">
+              <i class="fa-solid fa-arrow-down-9-1"></i> By Grade
+            </div>
+            <div class="student-list" id="sortedByGrade"></div>
+          </div>
+          <div>
+            <div class="sort-col-title">
+              <i class="fa-solid fa-arrow-down-a-z"></i> Alphabetical
+            </div>
+            <div class="student-list" id="sortedByName"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <i class="fa-solid fa-pen-to-square"></i>
+      <h3>Edit Grade</h3>
+    </div>
+    <div class="form-group">
+      <label>Student</label>
+      <input type="text" id="editName" readonly/>
+    </div>
+    <div class="form-group">
+      <label>New Grade (0 &ndash; 100)</label>
+      <input type="number" id="editGrade" min="0" max="100" step="0.01"/>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">
+        <i class="fa-solid fa-xmark"></i> Cancel
+      </button>
+      <button class="btn btn-confirm" onclick="saveEdit()">
+        <i class="fa-solid fa-check"></i> Save Changes
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast">
+  <span id="toastIcon" class="toast-icon"></span>
+  <span id="toastMsg"></span>
+</div>
+
+<script src="/js/app.js"></script>
+</body>
+</html>

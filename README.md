@@ -2,6 +2,8 @@
 
 A C# web application for managing student grades.
 
+![screenshot](screenshot.png)
+
 ## Features
 
 ### Student Management
