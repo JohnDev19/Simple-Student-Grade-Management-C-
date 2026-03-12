@@ -8,12 +8,11 @@ A web application for managing student grades, built with C# (.NET 7) and a cust
 
 ### Student Management
 - Add students with name and grade (0–100)
-- Edit grades via modal dialog
+- Edit grades
 - Delete students
 - Search by name with instant results
 
-### Philippine GPA Scale (CHED Standard)
-Accurate 1.0–5.0 Philippine grading system used by most universities.
+### GPA Scale (CHED Standard)
 
 | GPA  | Grade Range | Remarks      |
 |------|-------------|--------------|
@@ -30,7 +29,7 @@ Accurate 1.0–5.0 Philippine grading system used by most universities.
 
 ### Statistics
 - Class average with letter grade and GPA
-- Average GPA (Philippine scale) with remarks
+- Average GPA with remarks
 - Highest and lowest scoring student
 - Pass/Fail tracking (passing threshold: 75)
 - Pass/Fail rate bar chart
@@ -45,7 +44,7 @@ Accurate 1.0–5.0 Philippine grading system used by most universities.
 
 ### Export
 - **Excel (.xlsx)** — Two-sheet workbook: color-coded Student Roster (name, grade, letter, PH GPA, remarks, status) and a Statistics sheet with summary, top performers, and full GPA legend
-- **Word (.docx)** — Formatted document with student table, statistics summary, top performers, and embedded Philippine GPA scale table
+- **Word (.docx)** — Formatted document with student table, statistics summary, top performers, and embedded GPA scale table
 
 ### Data
 - Auto-save to `students.txt` (pipe-delimited)
