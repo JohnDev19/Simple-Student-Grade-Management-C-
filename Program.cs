@@ -135,13 +135,14 @@ namespace StudentGradeManager
 
         static async Task Main()
         {
+            int port = int.TryParse(Environment.GetEnvironmentVariable("PORT"), out int envPort) ? envPort : 5000;
             var listener = new HttpListener();
-            listener.Prefixes.Add("http://*:5000/");
+            listener.Prefixes.Add($"http://*:{port}/");
             listener.Start();
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("╔══════════════════════════════════════╗");
             Console.WriteLine("║    Student Grade Manager - Running   ║");
-            Console.WriteLine("║    http://0.0.0.0:5000              ║");
+            Console.WriteLine($"║    http://0.0.0.0:{port,-22} ║");
             Console.WriteLine("║    Press Ctrl+C to stop              ║");
             Console.WriteLine("╚══════════════════════════════════════╝");
             Console.ResetColor();
