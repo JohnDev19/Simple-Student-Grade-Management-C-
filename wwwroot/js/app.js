@@ -1,7 +1,6 @@
 const API = '/api';
 let currentSort = 'name';
 
-/* ─── API ─── */
 async function apiFetch(url, opts = {}) {
   const res = await fetch(url, {
     headers: { 'Content-Type': 'application/json' }, ...opts
@@ -10,7 +9,6 @@ async function apiFetch(url, opts = {}) {
   return res.json();
 }
 
-/* ─── TOAST ─── */
 function toast(msg, type = 'success') {
   const el = document.getElementById('toast');
   document.getElementById('toastMsg').textContent = msg;
@@ -21,7 +19,6 @@ function toast(msg, type = 'success') {
   setTimeout(() => { el.className = ''; }, 3400);
 }
 
-/* ─── GRADE HELPERS ─── */
 function getGradeClass(g) {
   if (g >= 90) return 'grade-a';
   if (g >= 80) return 'grade-b';
@@ -60,7 +57,6 @@ function getPhGpaLabel(gpa) {
   return 'Failed';
 }
 
-/* ─── ESCAPE ─── */
 function escHtml(s) {
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
@@ -68,29 +64,31 @@ function escXml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
 }
 
-/* ─── STUDENT ITEM ─── */
 function buildStudentItem(s, index, showActions = true) {
-  const cls     = getGradeClass(s.grade);
-  const stCls   = s.status === 'Pass' ? 'status-pass' : 'status-fail';
-  const enc     = encodeURIComponent(s.name);
-  const phGpa   = getPhGPA(s.grade).toFixed(2);
+  const cls   = getGradeClass(s.grade);
+  const stCls = s.status === 'Pass' ? 'status-pass' : 'status-fail';
+  const enc   = encodeURIComponent(s.name);
+  const phGpa = getPhGPA(s.grade).toFixed(2);
   return `
     <div class="student-item">
       <div class="student-rank">${index + 1}</div>
-      <div class="student-name">${escHtml(s.name)}</div>
-      <span class="grade-badge ${cls}">${s.grade.toFixed(1)}</span>
-      <span class="grade-badge badge-letter ${cls}">${getLetter(s.grade)}</span>
-      <span class="grade-badge badge-gpa gpa-neutral">${phGpa}</span>
-      <span class="status-pill ${stCls}">${s.status}</span>
-      ${showActions ? `
-      <div class="item-actions">
-        <button class="btn btn-sm btn-edit"   onclick="openEdit('${enc}',${s.grade})" title="Edit grade"><i class="fa-solid fa-pen"></i></button>
-        <button class="btn btn-sm btn-danger" onclick="deleteStudent('${enc}')" title="Remove"><i class="fa-solid fa-trash"></i></button>
-      </div>` : ''}
+      <div class="student-info">
+        <div class="student-name">${escHtml(s.name)}</div>
+        <div class="student-meta">
+          <span class="grade-badge ${cls}">${s.grade.toFixed(1)}</span>
+          <span class="grade-badge badge-letter ${cls}">${getLetter(s.grade)}</span>
+          <span class="grade-badge badge-gpa gpa-neutral">${phGpa}</span>
+          <span class="status-pill ${stCls}">${s.status}</span>
+          ${showActions ? `
+          <div class="item-actions">
+            <button class="btn btn-sm btn-edit"   onclick="openEdit('${enc}',${s.grade})" title="Edit grade"><i class="fa-solid fa-pen"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="deleteStudent('${enc}')" title="Remove"><i class="fa-solid fa-trash"></i></button>
+          </div>` : ''}
+        </div>
+      </div>
     </div>`;
 }
 
-/* ─── LOAD ALL ─── */
 async function loadAll() {
   try {
     const students = await apiFetch(`${API}/students?sort=${currentSort}`);
@@ -117,7 +115,6 @@ async function loadAll() {
   } catch (e) { console.error('loadAll error:', e); }
 }
 
-/* ─── STATS ─── */
 async function loadStats() {
   try {
     const s    = await apiFetch(`${API}/stats`);
@@ -197,7 +194,6 @@ async function loadStats() {
   } catch (e) { console.error('loadStats error:', e); }
 }
 
-/* ─── ADD / EDIT / DELETE ─── */
 async function addStudent() {
   const nameEl  = document.getElementById('addName');
   const gradeEl = document.getElementById('addGrade');
@@ -239,7 +235,6 @@ async function saveEdit() {
   } catch (e) { toast('Failed to save changes.', 'error'); }
 }
 
-/* ─── SEARCH ─── */
 async function searchStudent() {
   const q  = document.getElementById('searchInput').value.trim();
   if (!q) return;
@@ -268,7 +263,6 @@ async function searchStudent() {
   }
 }
 
-/* ─── SORT / TAB ─── */
 function setSortStudents(sort) {
   currentSort = sort;
   ['sortNameBtn','sortGradeBtn','sortGpaBtn'].forEach(id => document.getElementById(id)?.classList.remove('active'));
@@ -284,7 +278,6 @@ function switchTab(name, el) {
   document.getElementById(`tab-${name}`).classList.add('active');
 }
 
-/* ─── LAZY SCRIPT LOADER ─── */
 function loadScript(src) {
   return new Promise((resolve, reject) => {
     if (document.querySelector(`script[src="${src}"]`)) { resolve(); return; }
@@ -439,7 +432,6 @@ async function exportExcel() {
         });
       });
 
-      /* Top 3 */
       ws2.getRow(7).height = 8;
       ws2.mergeCells('A8:D8');
       const tp = ws2.getCell('A8');
@@ -539,7 +531,6 @@ async function exportDocx() {
       </w:tr>`;
     }).join('');
 
-    /* stats */
     let statsXml = '';
     if (stats.hasData) {
       statsXml = `
@@ -598,7 +589,6 @@ async function exportDocx() {
         </w:tbl>`;
     }
 
-    /* document.xml */
     const docXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
             xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
@@ -636,7 +626,6 @@ async function exportDocx() {
   </w:body>
 </w:document>`;
 
-    /* Assemble DOCX ZIP */
     const zip = new JSZip();
     zip.file('[Content_Types].xml',
       `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -702,7 +691,7 @@ async function exportDocx() {
   }
 }
 
-/* ─── DOCX XML HELPERS ─── */
+/* ─── DOCX XML ─── */
 function dPara(text, { bold=false, size=22, align='left', color='000000', spaceAfter=160 } = {}) {
   return `<w:p>
     <w:pPr><w:jc w:val="${align}"/><w:spacing w:after="${spaceAfter}"/></w:pPr>
@@ -724,7 +713,6 @@ function dCell(text, { bold=false, align='left', width=1500, bg='', color='00000
   </w:tc>`;
 }
 
-/* ─── UTILS ─── */
 function downloadBlob(blob, filename) {
   const url = URL.createObjectURL(blob);
   const a   = document.createElement('a');
@@ -733,7 +721,6 @@ function downloadBlob(blob, filename) {
 }
 function today() { return new Date().toISOString().slice(0, 10); }
 
-/* ─── INIT ─── */
 document.addEventListener('DOMContentLoaded', () => {
   loadAll();
   document.getElementById('addGrade').addEventListener('keydown',   e => { if (e.key === 'Enter') addStudent(); });
